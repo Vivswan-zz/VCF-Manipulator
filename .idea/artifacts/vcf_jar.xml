@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="vcf:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/vcf_jar</output-path>
+    <root id="archive" name="vcf.jar">
+      <element id="module-output" name="vcf" />
+    </root>
+  </artifact>
+</component>

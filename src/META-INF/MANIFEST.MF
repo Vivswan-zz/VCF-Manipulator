@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: .;vcf.jar com.vivswan.VCF.vcf
+Main-Class: com.vivswanshah.VCF.vcf
+

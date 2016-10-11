@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_vcf" default="compile.module.vcf">
+  <dirname property="module.vcf.basedir" file="${ant.file.module_vcf}"/>
+  
+  <property name="module.jdk.home.vcf" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.vcf" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.vcf" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.vcf" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="vcf.output.dir" value="${module.vcf.basedir}/out/production/vcf"/>
+  <property name="vcf.testoutput.dir" value="${module.vcf.basedir}/out/test/vcf"/>
+  
+  <path id="vcf.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="vcf.module.production.classpath">
+    <path refid="${module.jdk.classpath.vcf}"/>
+  </path>
+  
+  <path id="vcf.runtime.production.module.classpath">
+    <pathelement location="${vcf.output.dir}"/>
+  </path>
+  
+  <path id="vcf.module.classpath">
+    <path refid="${module.jdk.classpath.vcf}"/>
+    <pathelement location="${vcf.output.dir}"/>
+  </path>
+  
+  <path id="vcf.runtime.module.classpath">
+    <pathelement location="${vcf.testoutput.dir}"/>
+    <pathelement location="${vcf.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.vcf">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.vcf">
+    <patternset refid="excluded.from.module.vcf"/>
+  </patternset>
+  
+  <path id="vcf.module.sourcepath">
+    <dirset dir="${module.vcf.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.vcf" depends="compile.module.vcf.production,compile.module.vcf.tests" description="Compile module vcf"/>
+  
+  <target name="compile.module.vcf.production" depends="register.custom.compilers" description="Compile module vcf; production classes">
+    <mkdir dir="${vcf.output.dir}"/>
+    <javac2 destdir="${vcf.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.vcf}/javac">
+      <compilerarg line="${compiler.args.vcf}"/>
+      <bootclasspath refid="vcf.module.bootclasspath"/>
+      <classpath refid="vcf.module.production.classpath"/>
+      <src refid="vcf.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.vcf"/>
+    </javac2>
+    
+    <copy todir="${vcf.output.dir}">
+      <fileset dir="${module.vcf.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.vcf.tests" depends="register.custom.compilers,compile.module.vcf.production" description="compile module vcf; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.vcf" description="cleanup module">
+    <delete dir="${vcf.output.dir}"/>
+    <delete dir="${vcf.testoutput.dir}"/>
+  </target>
+</project>
